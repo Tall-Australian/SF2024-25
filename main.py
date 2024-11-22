@@ -61,15 +61,15 @@ def partition(sizes, dataset, subset, i):
           img = Image.open(f"D:/Eamon/Documents/Coding/Python/SF/2024-2025/{dataset}/{subset}/{label}/{img_name}")
           img.save(f"D:/Eamon/Documents/Coding/Python/SF/2024-2025/Trial_{i+1}/{dataset}_{subset}/{label}/{img_name}")
 
-# for i in range(10):
-#   partition([x for x in range(100, 10001, 100)], "mnist", "train", i)
-#   partition([1000], "mnist", "test", i)
+for i in range(15):
+  partition([x for x in range(100, 10001, 100)], "mnist", "train", i)
+  partition([1000], "mnist", "test", i)
 
-#   partition([x for x in range(100, 10001, 100)], "fashion_mnist", "train", i)
-#   partition([1000], "fashion_mnist", "test", i)
+  partition([x for x in range(100, 10001, 100)], "fashion_mnist", "train", i)
+  partition([1000], "fashion_mnist", "test", i)
 
-#   partition([x for x in range(100, 10001, 100)], "sign_mnist", "train", i)
-#   partition([1000], "sign_mnist", "test", i)
+  partition([x for x in range(100, 10001, 100)], "sign_mnist", "train", i)
+  partition([1000], "sign_mnist", "test", i)
 
 def buildModel(dataset_path):
   dataset_url = dataset_path
@@ -97,7 +97,6 @@ def buildModel(dataset_path):
   batch_size=batch_size, verbose=0)
 
   class_names = train_ds.class_names
-  # print(class_names)
 
   class_json = {}
   for i in range(len(class_names)):
@@ -112,7 +111,6 @@ def buildModel(dataset_path):
   image_batch, labels_batch = next(iter(normalized_ds))
 
   first_image = image_batch[0]
-  # print(np.min(first_image), np.max(first_image))
 
   AUTOTUNE = tf.data.AUTOTUNE
 
@@ -154,11 +152,11 @@ def buildModel(dataset_path):
   return train_ds, val_ds, model
 
 def trainModel(dataset, dataset_path, size, epochs, i):
-  train_ds, val_ds, model = buildModel(dataset_path)                              # Build model
+  train_ds, val_ds, model = buildModel(dataset_path)
 
   start = time.time()
 
-  model.fit(                                                                      # Train model
+  model.fit(
     train_ds,
     validation_data=val_ds,
     epochs=epochs,
@@ -167,19 +165,14 @@ def trainModel(dataset, dataset_path, size, epochs, i):
 
   end = time.time()
   timer = end - start
-  # print(timer)
   with open("D:/Eamon/Documents/Coding/Python/SF/2024-2025/time.txt", "a") as file:
     file.write(f"Trial_{i+1}: {dataset}_{size}: {timer}\n")
 
   model.save(f"D:/Eamon/Documents/Coding/Python/SF/2024-2025/Trial_{i+1}/{dataset}_{size}.keras")
-  # model.summary()
-  # model.evaluate(train_ds)
-  # model.evaluate(val_ds)
 
 epochs = 100
 
-for i in range(9):
-  i = i+1
+for i in range(15):
   for dataset in ["mnist", "fashion_mnist", "sign_mnist"]:
     for size in [x for x in range(100, 10001, 100)]:
       print(f"Trial {i+1}: {dataset}_{size}")
