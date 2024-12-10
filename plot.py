@@ -2,6 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 import pandas as pd
+from collections import Counter
+
+def most_common(lst):
+    data = Counter(lst)
+    return data.most_common(1)[0][0]
 
 def lin_func(x, y, meta):
     reg = np.polyfit(x,y,deg=1)
@@ -27,7 +32,8 @@ def sqrt_func(x, y, meta):
     return r2, x_fitted, y_fitted
 
 def exp_func(x, y, meta):
-    coeffs = np.polyfit(x, np.log(y), 1)
+    coeffs = np.polyfit(x, np.log(y), 1, w=np.sqrt(y))
+    print(coeffs)
     x_fitted = np.linspace(min(x),max(x),100)
     y_fitted = np.exp(coeffs[1])*np.exp(coeffs[0]*x_fitted)
     r2 = r2_score(y, y_fitted)
@@ -82,9 +88,17 @@ def plot(dataset, meta={"name":"MNIST","metric":"Accuracy (%)","id":"acc"}):
     
     plt.tight_layout()
     plt.show()
+    
+    return {"func": functions[r2_values.index(max(r2_values))],"r2": max(r2_values)}
+
+best_func_acc = []
+best_func_time = []
 
 for dataset in ["mnist", "fashion_mnist", "sign_mnist"]:
-    plot(dataset, meta={"name":dataset.upper(),"metric":"Accuracy (%)","id":"acc"})
+    best_func_acc.append(plot(dataset, meta={"name":dataset.upper(),"metric":"Accuracy (%)","id":"acc"}))
 
 for dataset in ["mnist", "fashion_mnist", "sign_mnist"]:
-    plot(dataset, meta={"name":dataset.upper(),"metric":"Time (Seconds)","id":"time"})
+    best_func_time.append(plot(dataset, meta={"name":dataset.upper(),"metric":"Time (Seconds)","id":"time"}))
+    
+print(f"{most_common([x['func'] for x in best_func_acc])}: {sum([x['r2'] for x in best_func_acc])/3}")
+print(f"{most_common([x['func'] for x in best_func_time])}: {sum([x['r2'] for x in best_func_time])/3}")
