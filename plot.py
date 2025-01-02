@@ -12,7 +12,7 @@ def lin_func(x, y, meta):
     reg = np.polyfit(x,y,deg=1)
     p = np.poly1d(reg)
     r2 = r2_score(y, p(x))
-    print(f"{meta["name"]} linear r2 score: {r2}")
+    print(f"{meta['name']} linear r2 score: {r2}")
     return r2, x, p(x)
 
 def log_func(x, y, meta):
@@ -20,7 +20,7 @@ def log_func(x, y, meta):
     x_fitted = np.linspace(np.min(x), np.max(x), 100)
     y_fitted = a[0] * np.log(x_fitted) + a[1]
     r2 = r2_score(y, y_fitted)
-    print(f"{meta["name"]} logarithmic r2 score: {r2}")
+    print(f"{meta['name']} logarithmic r2 score: {r2}")
     return r2, x_fitted, y_fitted
 
 def sqrt_func(x, y, meta):
@@ -28,7 +28,7 @@ def sqrt_func(x, y, meta):
     x_fitted = np.linspace(min(x),max(x),100)
     y_fitted = coeffs[0]*np.sqrt(x_fitted)+coeffs[1]
     r2 = r2_score(y, y_fitted)
-    print(f"{meta["name"]} square root r2 score: {r2}")
+    print(f"{meta['name']} square root r2 score: {r2}")
     return r2, x_fitted, y_fitted
 
 def exp_func(x, y, meta):
@@ -37,11 +37,11 @@ def exp_func(x, y, meta):
     x_fitted = np.linspace(min(x),max(x),100)
     y_fitted = np.exp(coeffs[1])*np.exp(coeffs[0]*x_fitted)
     r2 = r2_score(y, y_fitted)
-    print(f"{meta["name"]} exponential r2 score: {r2}")
+    print(f"{meta['name']} exponential r2 score: {r2}")
     return r2, x_fitted, y_fitted
 
 def plot(dataset, meta={"name":"MNIST","metric":"Accuracy (%)","id":"acc"}):
-    df = pd.read_csv(f"D:/Eamon/Documents/Coding/Python/SF/2024-2025/output/mean_{meta["id"]}_{dataset}_data.csv", index_col=0)
+    df = pd.read_csv(f"D:/Eamon/Documents/Coding/Python/SF/2024-2025/output/mean_{meta['id']}_{dataset}_data.csv", index_col=0)
     print(df)
     
     x = np.array(df.index)
@@ -51,7 +51,7 @@ def plot(dataset, meta={"name":"MNIST","metric":"Accuracy (%)","id":"acc"}):
     plt.plot(x, y, 'o')
     plt.xlabel("# of Images")
     plt.ylabel(meta["metric"])
-    plt.title(f"Dataset Size vs. {meta["metric"]} in {meta["name"]}")
+    plt.title(f"Dataset Size vs. {meta['metric']} in {meta['name']}")
 
     r2_values = []
     functions = ["Linear", "Logarithmic", "Square Root", "Exponential"]
